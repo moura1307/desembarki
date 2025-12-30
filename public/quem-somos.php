@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
@@ -7,19 +7,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         <!-- Bootstrap CSS v5.2.1 -->
-        <link rel="stylesheet" type="text/css" href="style.css" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-                integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-                crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+                <link rel="stylesheet" href="../assets/css/style.css">
+                <script src="../assets/js/dark-mode.js"></script>
 </head>
 
 <body>
         <header>
                 <nav class="navbar navbar-expand-lg bg-body-tertiary">
                         <div class="container">
-                                <a class="navbar-brand p-0" href="home.html">
-                                        <img src="photos/logo.png" class="navbar-brand-img" alt="..." height="70">
+                                <a class="navbar-brand p-0" href="home.php">
+                                        <img src="../assets/img/logo.png" class="navbar-brand-img" alt="..." height="70">
                                 </a>
                                 <!-- Updated target to match collapse ID -->
                                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -30,10 +30,10 @@
                                 <!-- Collapse with matching ID -->
                                 <div class="collapse navbar-collapse" id="navbarCollapse">
                                                 <ul class="navbar-nav ms-auto"><li class="nav-item">
-                                                        <a class="fs-5 nav-link" href="home.html">Home</a>
+                                                        <a class="fs-5 nav-link" href="home.php">Home</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                        <a class="fs-5 nav-link" href="product.html">Produtos</a>
+                                                        <a class="fs-5 nav-link" href="product.php">Produtos</a>
                                                 </li>
                                                 <li class="nav-item">
                                                         <a class="fs-5 nav-link" id="navbarLandings" href="#"
@@ -43,7 +43,7 @@
                                                 </li>
                                                 <li class="nav-item">
                                                         <a class="fs-5 nav-link" id="navbarLandings"
-                                                                href="pagina-contato.html" aria-haspopup="true"
+                                                                href="pagina-contato.php" aria-haspopup="true"
                                                                 aria-expanded="false">
                                                                 Contato
                                                         </a>
@@ -72,7 +72,7 @@
                                 </div>
                                 <!-- Changed from col-6 to col-12 col-md-6 -->
                                 <div class="col-12 col-md-6">
-                                        <img src="photos/quem-somos.jpg" class="img-fluid p-3 center-on-mobile" alt="...">
+                                        <img src="../assets/img/quem-somos.jpg" class="img-fluid p-3 center-on-mobile" alt="...">
                                 </div>
                         </div>
                 </div>
@@ -176,4 +176,4 @@
                 crossorigin="anonymous"></script>
 </body>
 
-</html>
+<html>
