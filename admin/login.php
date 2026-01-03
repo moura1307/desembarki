@@ -40,11 +40,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <form method="post">
     <div class="mb-3">
       <label>Usuário</label>
-      <input name="nome" class="form-control" required>
+      <input name="nome" class="form-control" required autocomplete="off">
     </div>
     <div class="mb-3">
       <label>Senha</label>
-      <input name="senha" type="password" class="form-control" required>
+      <input name="senha" type="password" class="form-control" required autocomplete="off">
     </div>
     <button class="btn btn-dark w-100">Entrar</button>
   </form>

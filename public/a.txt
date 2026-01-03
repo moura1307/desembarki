@@ -1,0 +1,32 @@
+<div class="col-md-3 mb-4">
+                                                <a href="#" class="card h-100">
+                                                        <img src="../assets/img/produto.png" class="card-img-top" alt="Produto 1">
+                                                        <div class="card-body">
+                                                                <h5 class="card-title">Produto 1</h5>
+                                                        </div>
+                                                </a>
+                                        </div>
+                                        <div class="col-md-3 mb-4">
+                                                <a href="#" class="card h-100">
+                                                        <img src="../assets/img/produto.png" class="card-img-top" alt="Produto 1">
+                                                        <div class="card-body">
+                                                                <h5 class="card-title">Produto 2</h5>
+                                                        </div>
+                                                </a>
+                                        </div>
+                                        <div class="col-md-3 mb-4" id="card_outros">
+                                                <a href="#" class="card h-100">
+                                                        <img src="../assets/img/produto.png" class="card-img-top" alt="Produto 1">
+                                                        <div class="card-body">
+                                                                <h5 class="card-title">Produto 3</h5>
+                                                        </div>
+                                                </a>
+                                        </div>
+                                        <div class="col-md-3 mb-4">
+                                                <a href="#" class="card h-100">
+                                                        <img src="../assets/img/produto.png" class="card-img-top" alt="Produto 1">
+                                                        <div class="card-body">
+                                                                <h5 class="card-title">Produto 4</h5>
+                                                        </div>
+                                                </a>
+                                        </div>

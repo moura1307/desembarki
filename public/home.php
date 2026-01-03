@@ -110,7 +110,7 @@
                                                 <div class="card-body">
                                                         <a href="#" class="stretched-link text-reset">
                                                                 <h5 class="card-title">Cartão</h5>
-                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenastiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
+                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenas tiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
                                                         </a>
                                                 </div>
                                         </div>
@@ -122,7 +122,7 @@
                                                 <div class="card-body">
                                                         <a href="#" class="stretched-link text-reset">
                                                                 <h5 class="card-title">Cartão</h5>
-                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenastiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
+                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenas tiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
                                                         </a>
                                                 </div>
                                         </div>
@@ -134,7 +134,7 @@
                                                 <div class="card-body">
                                                         <a href="#" class="stretched-link text-reset">
                                                                 <h5 class="card-title">Cartão</h5>
-                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenastiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
+                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenas tiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
                                                         </a>
                                                 </div>
                                         </div>
@@ -146,7 +146,7 @@
                                                 <div class="card-body">
                                                         <a href="#" class="stretched-link text-reset">
                                                                 <h5 class="card-title">Cartão</h5>
-                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenastiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
+                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenas tiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
                                                         </a>
                                                 </div>
                                         </div>
@@ -161,7 +161,7 @@
                                                 <div class="card-body">
                                                         <a href="#" class="stretched-link text-reset">
                                                                 <h5 class="card-title">Cartão</h5>
-                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenastiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
+                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenas tiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
                                                         </a>
                                                 </div>
                                         </div>
@@ -173,7 +173,7 @@
                                                 <div class="card-body">
                                                         <a href="#" class="stretched-link text-reset">
                                                                 <h5 class="card-title">Cartão</h5>
-                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenastiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
+                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenas tiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
                                                         </a>
                                                 </div>
                                         </div>
@@ -185,7 +185,7 @@
                                                 <div class="card-body">
                                                         <a href="#" class="stretched-link text-reset">
                                                                 <h5 class="card-title">Cartão</h5>
-                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenastiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
+                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenas tiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
                                                         </a>
                                                 </div>
                                         </div>
@@ -303,7 +303,7 @@
                                 </div>
                         </div>
                         <div class="d-flex flex-column flex-sm-row justify-content-between my-4 py-4 border-top">
-                                <p>© 2025 Desembarki. Todos os direitos reservados.</p>
+                                <p>© <script>document.write(new Date().getFullYear())</script> Desembarki. Todos os direitos reservados.</p>
                                 <ul class="list-unstyled d-flex">
                                         <li class="ms-3">
                                                 <a class="link-dark" href="#"><i class="bi bi-whatsapp"></i></a>
