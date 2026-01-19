@@ -1,3 +1,18 @@
+<?php
+require_once '../admin/db.php';
+
+// Usamos MIN(i.caminho_arquivo) para pegar a primeira imagem encontrada
+$sql = "SELECT p.*, MIN(i.caminho_arquivo) AS imagem_principal
+        FROM produtos p 
+        LEFT JOIN produto_imagens i ON p.id = i.produto_id 
+        GROUP BY p.id 
+        ORDER BY p.criado_em DESC
+        LIMIT 12";
+
+$stmt = $pdo->query($sql);
+$produtos = $stmt->fetchAll();
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -31,7 +46,7 @@
                                                         <a class="fs-5 nav-link" href="#">Home</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                        <a class="fs-5 nav-link" href="product.php">Produtos</a>
+                                                        <a class="fs-5 nav-link" href="products_page.php">Produtos</a>
                                                 </li>
                                                 <li class="nav-item">
                                                         <a class="fs-5 nav-link" href="quem-somos.php">Quem somos</a>
@@ -100,103 +115,41 @@
                 </div>
 
                 <!-- Product Cards -->
-                <div class="container">
+                <div class="container mb-5">
                         <h2>Conheça Nossos Produtos</h2>
                         <div class="row remove-on-small">
-                                <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
-                                        <div class="card shadow-sm card-prod">
-                                                <img src="https://arquivosgrafica.obs.la-south-2.myhuaweicloud.com/midia/1FCAA7EC-0F65-43C2-A490-98C9F1E65A6A/servicos/14B7E8C6-4C87-48B9-A406-7836749D0F4A.jpg"
-                                                        class="card-img-top" alt="Cartão" />
-                                                <div class="card-body">
-                                                        <a href="#" class="stretched-link text-reset">
-                                                                <h5 class="card-title">Cartão</h5>
-                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenas tiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
-                                                        </a>
+                                <div class="row row-cols-12">
+                                        <div id="carouselProdutos" class="carousel slide" data-bs-ride="carousel">
+                                                <div class="carousel-inner">
+                                                        <?php $chunks = array_chunk($produtos, 4); foreach ($chunks as $index => $bloco): ?>
+                                                        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                                                                <div class="row g-4">
+                                                                <?php foreach ($bloco as $p): ?>
+                                                                        <div class="col-md-3">
+                                                                        <div class="card h-100 shadow-sm">
+                                                                                <?php $caminho = !empty($p['imagem_principal']) ? $p['imagem_principal'] : 'assets/img/sem-foto.png'; ?>
+                                                                                <img src="<?= $caminho ?>" class="card-img-top" alt="<?= htmlspecialchars($p['nome']) ?>" style="aspect-ratio: 1/1; object-fit: cover;">
+                                                                                <div class="card-body text-center">
+                                                                                <a href="produto/<?= $p['slug'] ?>" class="stretched-link text-reset">
+                                                                                        <h5 class="card-title"><?= htmlspecialchars($p['nome']) ?></h5>
+                                                                                        <p class="card-text"><?= htmlspecialchars($p['descricao']) ?></p>
+                                                                                </a>
+                                                                                </div>
+                                                                        </div>
+                                                                        </div>
+                                                                <?php endforeach; ?>
+                                                                </div>
+                                                        </div>
+                                                        <?php endforeach; ?>
                                                 </div>
+    
+                                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselProdutos" data-bs-slide="prev">
+                                                        <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                                                </button>
+                                                <button class="carousel-control-next" type="button" data-bs-target="#carouselProdutos" data-bs-slide="next">
+                                                        <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                                                </button>
                                         </div>
-                                </div>
-                                <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
-                                        <div class="card shadow-sm card-prod">
-                                                <img src="https://arquivosgrafica.obs.la-south-2.myhuaweicloud.com/midia/1FCAA7EC-0F65-43C2-A490-98C9F1E65A6A/servicos/14B7E8C6-4C87-48B9-A406-7836749D0F4A.jpg"
-                                                        class="card-img-top" alt="Cartão" />
-                                                <div class="card-body">
-                                                        <a href="#" class="stretched-link text-reset">
-                                                                <h5 class="card-title">Cartão</h5>
-                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenas tiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
-                                                        </a>
-                                                </div>
-                                        </div>
-                                </div>
-                                <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
-                                        <div class="card shadow-sm card-prod">
-                                                <img src="https://arquivosgrafica.obs.la-south-2.myhuaweicloud.com/midia/1FCAA7EC-0F65-43C2-A490-98C9F1E65A6A/servicos/14B7E8C6-4C87-48B9-A406-7836749D0F4A.jpg"
-                                                        class="card-img-top" alt="Cartão" />
-                                                <div class="card-body">
-                                                        <a href="#" class="stretched-link text-reset">
-                                                                <h5 class="card-title">Cartão</h5>
-                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenas tiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
-                                                        </a>
-                                                </div>
-                                        </div>
-                                </div>
-                                <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 remove-on-medium">
-                                        <div class="card shadow-sm card-prod">
-                                                <img src="https://arquivosgrafica.obs.la-south-2.myhuaweicloud.com/midia/1FCAA7EC-0F65-43C2-A490-98C9F1E65A6A/servicos/14B7E8C6-4C87-48B9-A406-7836749D0F4A.jpg"
-                                                        class="card-img-top" alt="Cartão" />
-                                                <div class="card-body">
-                                                        <a href="#" class="stretched-link text-reset">
-                                                                <h5 class="card-title">Cartão</h5>
-                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenas tiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
-                                                        </a>
-                                                </div>
-                                        </div>
-                                </div>
-                        </div>
-
-                        <div class="row my-5">
-                                <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 remove-on-small">
-                                        <div class="card shadow-sm card-prod">
-                                                <img src="https://arquivosgrafica.obs.la-south-2.myhuaweicloud.com/midia/1FCAA7EC-0F65-43C2-A490-98C9F1E65A6A/servicos/14B7E8C6-4C87-48B9-A406-7836749D0F4A.jpg"
-                                                        class="card-img-top" alt="Cartão" />
-                                                <div class="card-body">
-                                                        <a href="#" class="stretched-link text-reset">
-                                                                <h5 class="card-title">Cartão</h5>
-                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenas tiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
-                                                        </a>
-                                                </div>
-                                        </div>
-                                </div>
-                                <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
-                                        <div class="card shadow-sm card-prod">
-                                                <img src="https://arquivosgrafica.obs.la-south-2.myhuaweicloud.com/midia/1FCAA7EC-0F65-43C2-A490-98C9F1E65A6A/servicos/14B7E8C6-4C87-48B9-A406-7836749D0F4A.jpg"
-                                                        class="card-img-top" alt="Cartão" />
-                                                <div class="card-body">
-                                                        <a href="#" class="stretched-link text-reset">
-                                                                <h5 class="card-title">Cartão</h5>
-                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenas tiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
-                                                        </a>
-                                                </div>
-                                        </div>
-                                </div>
-                                <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 remove-on-medium">
-                                        <div class="card shadow-sm card-prod">
-                                                <img src="https://arquivosgrafica.obs.la-south-2.myhuaweicloud.com/midia/1FCAA7EC-0F65-43C2-A490-98C9F1E65A6A/servicos/14B7E8C6-4C87-48B9-A406-7836749D0F4A.jpg"
-                                                        class="card-img-top" alt="Cartão" />
-                                                <div class="card-body">
-                                                        <a href="#" class="stretched-link text-reset">
-                                                                <h5 class="card-title">Cartão</h5>
-                                                                <p class="card-text"> Cartões em papel Couché 250g estão disponíveis em pequenas tiragens e oferecem um ótimo custo benefício com qualidade de impressão digital.</p>
-                                                        </a>
-                                                </div>
-                                        </div>
-                                </div>
-                                <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
-                                        <a href="#" class="text-reset">
-                                                <div class="card shadow-sm">
-                                                        <img src="../assets/img/saiba-mais.png" class="card-img-top category"
-                                                                alt="Saiba Mais" style="border-radius: 5px;" />
-                                                </div>
-                                        </a>
                                 </div>
                         </div>
                 </div>

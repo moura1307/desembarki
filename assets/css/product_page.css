@@ -24,7 +24,6 @@
     flex-direction: column;
     gap: 8px;
     height: 400px;
-    /* Match this to the main image height for symmetry */
     overflow-y: hidden;
     scroll-behavior: smooth;
 }
@@ -33,3 +32,4 @@
     background-color: yellow;
     font-size: 18px;
 }
+

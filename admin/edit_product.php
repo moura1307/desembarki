@@ -30,9 +30,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->beginTransaction();
 
         // Atualiza tabela principal
-        $update = $pdo->prepare("UPDATE produtos SET nome = ?, slug = ?, descricao = ?, gramatura = ? WHERE id = ?");
-        $update->execute([$nome, $slug, $descricao, $gramatura, $id]);
+        $update = $pdo->prepare("UPDATE produtos SET nome = ?, slug = ?, descricao = ? WHERE id = ?");
+        $update->execute([$nome, $slug, $descricao, $id]);
 
+        // Sincroniza Gramaturas
+        $pdo->prepare("DELETE FROM produto_gramaturas WHERE produto_id = ?")->execute([$id]);
+        $gramaturas = $_POST['gramaturas'] ?? [];
+        foreach ($gramaturas as $gram) {
+            if (!empty(trim($gram))) {
+                $pdo->prepare("INSERT INTO produto_gramaturas (produto_id, gramatura) VALUES (?, ?)")->execute([$id, trim($gram)]);
+            }
+        }   
+        
         // Sincroniza Tamanhos (Deleta e reinsere)
         // Sincroniza Tamanhos
         $delTam = $pdo->prepare("DELETE FROM produto_tamanhos WHERE produto_id = ?");

@@ -1,22 +1,44 @@
 <?php
-        require_once '../admin/db.php';
-        
-        $slug = $_GET['slug'] ?? '';
-        
-        if ($slug) {
-                $stmt = $pdo->prepare("SELECT * FROM produtos WHERE slug = ?");
-                $stmt->execute([$slug]);
-                $product = $stmt->fetch();
+require_once '../admin/db.php'; 
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
-                if ($product) {
-                        $stmtImg = $pdo->prepare("SELECT caminho_arquivo FROM produto_imagens WHERE produto_id = ?");
-                        $stmtImg->execute([$product['id']]);
-                        $imagens = $stmtImg->fetchAll(PDO::FETCH_COLUMN);
-                } else {
-                        echo "Produto não encontrado.";
-                        exit;
-                }
-        }
+$slug = $_GET['slug'] ?? '';
+$product = null;
+$imagens = [];
+$gramaturas = [];
+$tamanhos = [];
+
+if ($slug) {
+    // 1. Busca o produto
+    $stmt = $pdo->prepare("SELECT * FROM produtos WHERE slug = ?");
+    $stmt->execute([$slug]);
+    $product = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($product) {
+        $id = $product['id'];
+
+        // 2. Busca as imagens
+        $stmt_img = $pdo->prepare("SELECT caminho_arquivo FROM produto_imagens WHERE produto_id = ?");
+        $stmt_img->execute([$id]);
+        $imagens = $stmt_img->fetchAll(PDO::FETCH_COLUMN);
+
+        // 3. Busca as gramaturas
+        $stmt_gram = $pdo->prepare("SELECT gramatura FROM produto_gramaturas WHERE produto_id = ?");
+        $stmt_gram->execute([$id]);
+        $gramaturas = $stmt_gram->fetchAll(PDO::FETCH_COLUMN);
+
+        // 4. Busca os tamanhos (Ajuste 'nome_tamanho' para o nome da coluna na sua tabela)
+        $stmt_tam = $pdo->prepare("SELECT tamanho FROM produto_tamanhos WHERE produto_id = ?");
+        $stmt_tam->execute([$id]);
+        $tamanhos = $stmt_tam->fetchAll(PDO::FETCH_COLUMN);
+    }
+}
+
+if (!$product) {
+    header("Location: home.php");
+    exit;
+}
 ?>
 
 
@@ -27,14 +49,18 @@
 <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Desembarki Webgráfica</title>
+        <title><?= htmlspecialchars($product['nome']) ?> | Desembarki Webgráfica</title>
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-        <link rel="stylesheet" href="../assets/css/style.css">
-        <link rel="stylesheet" href="../assets/css/product_page.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
-        <script src="../assets/js/image-selector.js"></script>
+
+        <base href="http://localhost/Desembarki/public/">
+
+        <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="../assets/css/product_page.css?v=<?php echo time(); ?>">
+
+        <script src="../assets/js/image-selector.js" defer></script>
 
 </head>
 
@@ -87,8 +113,8 @@
                                                         </button>
 
                                                         <div id="thumb-container" class="thumb-scroll-viewport">
-                                                                <?php foreach ($imagens as $caminho): ?>
-                                                                        <img src="../uploads/<?= $caminho ?>" 
+                                                                <?php foreach ($imagens as $img): ?>
+                                                                        <img src="<?= $img ?>" 
                                                                         class="img-fluid thumb-image border" 
                                                                         style="cursor: pointer;" 
                                                                         onclick="changeImage(this.src, this)">
@@ -100,26 +126,47 @@
                                                         </button>
                                                 </div>
                                                 <div class="col-10">
-                                                        <img src="../uploads/<?= $imagens[0] ?>" id="main-image" class="img-fluid product-image" alt="Principal">
+                                                        <img id="main-image" src="<?= !empty($imagens) ? $imagens[0] : 'https://via.placeholder.com/500' ?>" class="img-fluid product-image" alt="<?= htmlspecialchars($product['nome']) ?>">
                                                 </div>
                                         </div>
                                 </div>
                                 <div class="col-lg-6">
-                                        <h1 class="mb-3"><?php echo htmlspecialchars($product['nome']); ?></h1>
+                                        <h1 class="mb-2"><?php echo htmlspecialchars($product['nome']); ?></h1>
                                         <hr>
-                                        <div class="card" style="height: 350px;">
+                                        <div class="card" style="height: 370px;">
                                                 <div class="card-body">
                                                         <h5 class="card-title">Descrição do Produto: </h5>
-                                                        <p class="card-text">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis,</p>
+                                                        <p class="card-text"><?php echo htmlspecialchars($product['descricao']); ?></p>
                                                         <hr>
-                                                        <h5 class="card-title">Gramaturas disponiveis:</h5>
-                                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                                        <h5 class="card-title">Gramaturas disponíveis:</h5>
+                                                        <p class="card-text">
+                                                        <?php if (!empty($gramaturas)): ?>
+                                                                <?php foreach ($gramaturas as $g): ?>
+                                                                <span class="badge border text-dark bg-light me-1"><?= htmlspecialchars($g) ?></span>
+                                                                <?php endforeach; ?>
+                                                        <?php else: ?>
+                                                                <small class="text-muted">Nenhuma gramatura informada.</small>
+                                                        <?php endif; ?>
+                                                        </p>
+
                                                         <hr>
-                                                        <h5 class="card-title">Tabela de Preços:</h5>
-                                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+
+                                                        <h5 class="card-title">Tabela de Tamanhos:</h5>
+                                                        <p class="card-text">
+                                                        <?php if (!empty($tamanhos)): ?>
+                                                                <?php foreach ($tamanhos as $t): ?>
+                                                                <span class="badge bg-secondary me-"><?= htmlspecialchars($t) ?></span>
+                                                                <?php endforeach; ?>
+                                                        <?php else: ?>
+                                                                <small class="text-muted">Consulte os tamanhos disponíveis.</small>
+                                                        <?php endif; ?>
+                                                        </p>
                                                 </div>
                                         </div>
-                                        <a class="btn btn-success btn-lg w-100 mt-4"><i class="bi bi-whatsapp me-2"></i>Interessado? Entre em contato! </a>
+                                        <a href="https://wa.me/SEUNUMERO?text=Olá, tenho interesse no produto: <?= urlencode($product['nome']) ?>" 
+                                                class="btn btn-success btn-lg w-100 mt-4">
+                                                <i class="bi bi-whatsapp me-2"></i>Interessado? Entre em contato!
+                                        </a>
                                 </div>
                         </div>
                         <div class="row">

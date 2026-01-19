@@ -20,6 +20,10 @@ if($id) {
         $stmtTam = $pdo->prepare("SELECT tamanho FROM produto_tamanhos WHERE produto_id = ?");
         $stmtTam->execute([$id]);
         $product['tamanhos'] = $stmtTam->fetchAll(PDO::FETCH_COLUMN);
+        
+        $stmtGram = $pdo->prepare("SELECT gramatura FROM produto_gramaturas WHERE produto_id = ?");
+        $stmtGram->execute([$id]);
+        $product['gramaturas'] = $stmtGram->fetchAll(PDO::FETCH_COLUMN);
 
         header('Content-Type: application/json');
         echo json_encode($product);

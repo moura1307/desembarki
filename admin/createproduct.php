@@ -18,22 +18,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'add')
     try {
         $pdo->beginTransaction();
 
-        // 1. Inserir produto (sem coluna preco)
         $stmt = $pdo->prepare("
-            INSERT INTO produtos (nome, slug, descricao, gramatura)
-            VALUES (:nome, :slug, :descricao, :gramatura)
+            INSERT INTO produtos (nome, slug, descricao)
+            VALUES (:nome, :slug, :descricao)
         ");
+        
         $stmt->execute([
             ':nome'      => $nome,
             ':slug'      => $slug,
-            ':descricao' => $descricao,
-            ':gramatura' => $gramatura
+            ':descricao' => $descricao
         ]);
 
         $produto_id = $pdo->lastInsertId();
 
-        // 2. Inserir Tamanhos
-        // Inserir Tamanhos
+        $gramaturas = $_POST['gramaturas'] ?? [];
+        foreach ($gramaturas as $gram) {
+            if (!empty(trim($gram))) {
+                $stmtGram = $pdo->prepare("INSERT INTO produto_gramaturas (produto_id, gramatura) VALUES (?, ?)");
+                $stmtGram->execute([$produto_id, trim($gram)]);
+            }
+        }
+        
         $tamanhos = $_POST['tamanhos'] ?? [];
         foreach ($tamanhos as $tam) {
             $tam = trim($tam);
@@ -42,8 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'add')
                 $stmtTam->execute([$produto_id, $tam]);
             }
         }
-
-        // 3. Inserir Imagens
+        
         $imagens = $_POST['imagens'] ?? [];
         foreach ($imagens as $url) {
             $url = trim($url);

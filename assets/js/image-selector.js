@@ -1,10 +1,11 @@
 
-function changeImage(src) {
-    const mainImage = document.getElementById('main-image');
-    if (mainImage) {
-        mainImage.src = src;
-    }
-    // Ensure there is NO scrollIntoView() call here!
+function changeImage(src, element) {
+    const mainImg = document.getElementById('main-image');
+    mainImg.src = src;
+    
+    // Opcional: marca qual miniatura está selecionada
+    document.querySelectorAll('.thumb-image').forEach(img => img.style.borderColor = 'transparent');
+    element.style.borderColor = '#007bff';
 }
 
 let currentIndex = 0;

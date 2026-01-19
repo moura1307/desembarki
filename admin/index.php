@@ -13,10 +13,12 @@ if (isset($_GET['error'])) {
 // Query corrigida: usa produto_tamanhos e GROUP_CONCAT para listar tudo em uma linha
 $sql = "SELECT p.*, 
         GROUP_CONCAT(DISTINCT pi.caminho_arquivo) as todas_imagens,
-        GROUP_CONCAT(DISTINCT t.tamanho SEPARATOR ', ') as todos_tamanhos
+        GROUP_CONCAT(DISTINCT t.tamanho SEPARATOR ', ') as todos_tamanhos,
+        GROUP_CONCAT(DISTINCT g.gramatura SEPARATOR ', ') as todas_gramaturas
         FROM produtos p 
         LEFT JOIN produto_imagens pi ON p.id = pi.produto_id 
         LEFT JOIN produto_tamanhos t ON p.id = t.produto_id
+        LEFT JOIN produto_gramaturas g ON p.id = g.produto_id
         GROUP BY p.id 
         ORDER BY p.id DESC";
         
@@ -54,9 +56,14 @@ $products = $pdo->query($sql)->fetchAll();
           </div>
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label">Gramatura (g)</label>
-              <input name="gramatura" type="number" class="form-control">
+            <label class="form-label">Gramaturas</label>
+            <div id="container-gramaturas">
+              <div class="input-group mb-2">
+                <input name="gramaturas[]" class="form-control" placeholder="Ex: 50">
+              </div>
             </div>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="addCampo('container-gramaturas')">+ Gramatura</button>
+          </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Tamanhos</label>
               <div id="container-tamanhos">
@@ -106,7 +113,7 @@ $products = $pdo->query($sql)->fetchAll();
             <strong><?= htmlspecialchars($p['nome']) ?></strong><br>
             <small class="text-muted"><?= htmlspecialchars($p['slug'] ?? '') ?></small>
           </td>
-          <td><?= $p['gramatura'] ? $p['gramatura'] . 'g' : '-' ?></td>
+          <td><?= !empty($p['todas_gramaturas']) ? htmlspecialchars($p['todas_gramaturas']) . 'g' : '-' ?></td>
           <td><?= htmlspecialchars($p['todos_tamanhos'] ?? 'Nenhum') ?></td>
           <td>
             <button class="btn btn-sm btn-outline-primary" onclick="editarProduto(<?= $p['id'] ?>)">Editar</button>
@@ -137,9 +144,11 @@ $products = $pdo->query($sql)->fetchAll();
               <textarea name="descricao" id="edit-descricao" class="form-control" rows="3"></textarea>
             </div>
             <div class="mb-3">
-              <label class="form-label">Gramatura</label>
-              <input name="gramatura" id="edit-gramatura" type="number" class="form-control">
+              <label class="form-label">Gramaturas</label>
+              <div id="container-gramaturas-edit"></div>
+              <button type="button" class="btn btn-sm btn-secondary mt-1" onclick="addCampo('container-gramaturas-edit')">+ Gramatura</button>
             </div>
+            
             <div class="mb-3">
               <label class="form-label">Tamanhos</label>
               <div id="container-tamanhos-edit"></div>
@@ -162,39 +171,52 @@ $products = $pdo->query($sql)->fetchAll();
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     function addCampo(containerId, valor = '') {
-      const inputName = containerId.includes('tamanhos') ? 'tamanhos[]' : 'imagens[]';
-      const div = document.createElement('div');
-      div.className = 'input-group mb-2';
-      div.innerHTML = `<input name="${inputName}" class="form-control" value="${valor}">
-                       <button type="button" class="btn btn-outline-danger" onclick="this.parentElement.remove()">X</button>`;
-      document.getElementById(containerId).appendChild(div);
+    let inputName;
+    
+    // Lógica corrigida para identificar o nome do campo
+    if (containerId.includes('tamanhos')) {
+        inputName = 'tamanhos[]';
+    } else if (containerId.includes('gramaturas')) {
+        inputName = 'gramaturas[]';
+    } else {
+        inputName = 'imagens[]';
     }
+
+    const div = document.createElement('div');
+    div.className = 'input-group mb-2';
+    div.innerHTML = `<input name="${inputName}" class="form-control" value="${valor}">
+                     <button type="button" class="btn btn-outline-danger" onclick="this.parentElement.remove()">X</button>`;
+    document.getElementById(containerId).appendChild(div);
+}
 
     function editarProduto(id) {
-      fetch(`get_product.php?id=${id}`)
-        .then(res => res.json())
-        .then(data => {
-          // Campos que já funcionam
-          document.getElementById('edit-id').value = data.id;
-          document.getElementById('edit-nome').value = data.nome;
-          document.getElementById('edit-gramatura').value = data.gramatura || '';
-          
-          // ADICIONE ESTA LINHA:
-          document.getElementById('edit-descricao').value = data.descricao || '';
-          
-          // Limpa e preenche Tamanhos
-          const contTam = document.getElementById('container-tamanhos-edit');
-          contTam.innerHTML = '';
-          (data.tamanhos || []).forEach(t => addCampo('container-tamanhos-edit', t));
+  fetch(`get_product.php?id=${id}`)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('edit-id').value = data.id;
+      document.getElementById('edit-nome').value = data.nome;
+      document.getElementById('edit-descricao').value = data.descricao || '';
 
-          // Limpa e preenche Imagens
-          const contImg = document.getElementById('container-imagens-edit');
-          contImg.innerHTML = '';
-          (data.imagens || []).forEach(img => addCampo('container-imagens-edit', img));
+      // --- ADICIONE ESTE BLOCO PARA AS GRAMATURAS ---
+      const contGram = document.getElementById('container-gramaturas-edit');
+      contGram.innerHTML = '';
+      if (data.gramaturas) {
+          data.gramaturas.forEach(g => addCampo('container-gramaturas-edit', g));
+      }
+      // ----------------------------------------------
 
-          new bootstrap.Modal(document.getElementById('modalEditar')).show();
-        });
-    }
+      const contTam = document.getElementById('container-tamanhos-edit');
+      contTam.innerHTML = '';
+      (data.tamanhos || []).forEach(t => addCampo('container-tamanhos-edit', t));
+
+      const contImg = document.getElementById('container-imagens-edit');
+      contImg.innerHTML = '';
+      (data.imagens || []).forEach(img => addCampo('container-imagens-edit', img));
+
+      new bootstrap.Modal(document.getElementById('modalEditar')).show();
+    })
+    .catch(err => console.error("Erro ao carregar modal:", err));
+}
 
     document.getElementById('formEditar').onsubmit = function(e) {
       e.preventDefault();
